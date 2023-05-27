@@ -8,7 +8,7 @@ const corsOptions = {
 
 // Connect to MongoDB
 mongoose
-   .connect("mongodb://localhost:27017/otoolslogger", {
+   .connect(`mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PW}@193.149.189.8:27017`, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
    })
@@ -21,23 +21,21 @@ mongoose
 
 // Define a schema for the message collection
 const messageSchema = new mongoose.Schema({
-   message: {
-      timestamp: {
-         type: Number,
-         required: true,
-      },
-      ip: {
-         type: String,
-         required: true,
-      },
-      proxy: {
-         type: String,
-         required: true,
-      },
-      text: {
-         type: String,
-         required: true,
-      },
+   timestamp: {
+      type: Number,
+      required: true,
+   },
+   ip: {
+      type: String,
+      required: false,
+   },
+   proxy: {
+      type: String,
+      required: false,
+   },
+   text: {
+      type: String,
+      required: false,
    },
 });
 
@@ -48,11 +46,9 @@ export default function handler(req, res) {
    // Enable CORS
    cors(corsOptions)(req, res, () => {
       if (req.method === "POST") {
-         const { message } = req.body;
-
+         const message = req.body;
          // Create a new message instance
-         const newMessage = new Message({ message });
-
+         const newMessage = new Message(message);
          // Save the message to MongoDB
          newMessage
             .save()
