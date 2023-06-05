@@ -9,7 +9,7 @@ const corsOptions = {
 
 // Connect to MongoDB
 mongoose
-   .connect(`mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PW}@127.0.0.1:27017/otools?authSource=admin`, {
+   .connect(`mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PW}@193.149.189.8:27017/otools?authSource=admin`, {
       dbName: "otools",
       useNewUrlParser: true,
       useUnifiedTopology: true,
@@ -58,15 +58,14 @@ const Message = mongoose.model("MessageV2", messageSchema);
 
 export default function handler(req, res) {
    // Enable CORS
-   cors(corsOptions)(req, res, () => {
+   cors(corsOptions)(req, res, async () => {
       if (req.method === "POST") {
          const message = req.body;
-
          try {
             var bytes = CryptoJS.AES.decrypt(message, process.env.KEY);
-            var decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+            var decryptedData = await JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
          } catch (error) {
-            res.status(500).json({ error: "Couldn't decrypt message" });
+            res.status(500).json({ error: "Couldn't decrypt message " + error });
          }
 
          const newMessage = new Message(decryptedData);
