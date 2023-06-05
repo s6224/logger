@@ -8,7 +8,7 @@ const corsOptions = {
 
 // Connect to MongoDB
 mongoose
-   .connect(`mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PW}@127.0.0.1:27017`, {
+   .connect(`mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PW}@127.0.0.1:27017/otools`, {
       dbName: "otools",
       useNewUrlParser: true,
       useUnifiedTopology: true,
@@ -53,7 +53,7 @@ const messageSchema = new mongoose.Schema({
 });
 
 // Create a model based on the schema
-const Message = mongoose.model("Message", messageSchema);
+const Message = mongoose.model("MessageV2", messageSchema);
 
 export default function handler(req, res) {
    // Enable CORS

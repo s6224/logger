@@ -8,7 +8,7 @@ const corsOptions = {
 
 // Connect to MongoDB
 mongoose
-   .connect(`mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PW}@193.149.189.8:27017`, {
+   .connect(`mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PW}@127.0.0.1:27017`, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
    })
