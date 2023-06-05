@@ -1,5 +1,6 @@
 import cors from "cors";
 import mongoose from "mongoose";
+import CryptoJS from "crypto-js";
 
 const corsOptions = {
    origin: "*", // Update this to allow requests from specific origins
@@ -61,7 +62,14 @@ export default function handler(req, res) {
       if (req.method === "POST") {
          const message = req.body;
 
-         const newMessage = new Message(message);
+         try {
+            var bytes = CryptoJS.AES.decrypt(message, process.env.KEY);
+            var decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+         } catch (error) {
+            res.status(500).json({ error: "Couldn't decrypt message" });
+         }
+
+         const newMessage = new Message(decryptedData);
          // Save the message to MongoDB
          newMessage
             .save()
@@ -74,7 +82,7 @@ export default function handler(req, res) {
             })
             .catch((error) => {
                console.log("Error saving message:", error);
-               res.status(500).json({ error: "Internal Server Error" });
+               res.status(500).json({ error: "Couldn't save to database" });
             });
       } else {
          res.status(405).json({ error: "Method Not Allowed" });
