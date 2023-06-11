@@ -1,60 +1,12 @@
 import cors from "cors";
-import mongoose from "mongoose";
 import CryptoJS from "crypto-js";
+import Message from "@/models/insightModel";
+import connectMongo from "@/utils/dbConfig";
 
 const corsOptions = {
    origin: "*", // Update this to allow requests from specific origins
    methods: ["POST"], // Specify the allowed HTTP methods
 };
-
-// Connect to MongoDB
-mongoose
-   .connect(`mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PW}@193.149.189.8:27017/otools?authSource=admin`, {
-      dbName: "otools",
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-   })
-   .then(() => {
-      console.log("Connected to MongoDB");
-   })
-   .catch((error) => {
-      console.log("MongoDB connection error:", error);
-   });
-
-// Define a schema for the message collection
-const messageSchema = new mongoose.Schema({
-   timestamp: {
-      type: Number,
-      required: true,
-   },
-   date: {
-      type: String,
-      required: true,
-   },
-   chatId: {
-      type: String,
-      requiered: true,
-   },
-   ss: {
-      type: String,
-      required: false,
-   },
-   ip: {
-      type: String,
-      required: false,
-   },
-   proxy: {
-      type: String,
-      required: false,
-   },
-   text: {
-      type: String,
-      required: false,
-   },
-});
-
-// Create a model based on the schema
-const Message = mongoose.model("MessageV2", messageSchema);
 
 export default function handler(req, res) {
    // Enable CORS
@@ -67,6 +19,8 @@ export default function handler(req, res) {
          } catch (error) {
             res.status(500).json({ error: "Couldn't decrypt message " + error });
          }
+
+         await connectMongo();
 
          const newMessage = new Message(decryptedData);
          // Save the message to MongoDB
