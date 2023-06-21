@@ -58,6 +58,8 @@ export default function handler(req, res) {
             const session = {
                username: decryptedData.username,
                session: sessionId,
+               log: user.log,
+               permissions: user.permissions,
                timestamp: Date.now(),
                expires: Date.now() + 1000 * 60 * 60 * 3,
             };
@@ -74,6 +76,8 @@ export default function handler(req, res) {
                   res.status(200).json({
                      success: true,
                      sessiontoken: session.session,
+                     log: user.log,
+                     permissions: user.permissions,
                   });
                })
                .catch((error) => {

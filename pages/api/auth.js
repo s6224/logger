@@ -1,7 +1,4 @@
 import cors from "cors";
-import mongoose from "mongoose";
-import CryptoJS from "crypto-js";
-import bcrypt from "bcrypt";
 
 import Session from "@/models/sessionModel";
 import connectMongo from "@/utils/dbConfig";
@@ -24,12 +21,13 @@ export default function handler(req, res) {
          const session = await Session.findOne({
             session: sessionid,
          });
-         console.log(session);
+         //console.log(session);
+         //If there is a session and it is valid, update the session with a new timestamp
          if (session && session.expires > Date.now()) {
-            res.status(200).json({ success: true });
+            res.status(200).json({ success: true, log: session.log });
             await Session.findByIdAndUpdate(session._id, { expires: Date.now() + 1000 * 60 * 60 * 3 });
          } else {
-            res.status(500).json({ error: "Please Log in! " });
+            res.status(500).json({ error: "Session expired!" });
          }
       } else {
          res.status(405).json({ error: "Method Not Allowed" });
