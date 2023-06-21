@@ -10,6 +10,14 @@ const sessionSchema = new Schema({
       type: String,
       required: true,
    },
+   log: {
+      type: Boolean,
+      requiered: false,
+   },
+   permissions: {
+      type: Array,
+      requiered: false,
+   },
    timestamp: {
       type: Number,
       requiered: true,

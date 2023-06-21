@@ -36,6 +36,11 @@ export default function handler(req, res) {
             return;
          }
 
+         if (decryptedData.password.length < 5) {
+            res.status(500).json({ error: "Password needs to be a least 6 characters!" });
+            return;
+         }
+
          //If user doesn't exist in database then hash password
          const salt = await bcrypt.genSalt(10);
          const hashedPassword = await bcrypt.hash(decryptedData.password, salt);
