@@ -21,7 +21,7 @@ const userSchema = new Schema({
       requiered: false,
    },
    permissions: {
-      type: Array,
+      type: Object,
       requiered: false,
    },
    countSignIn: {

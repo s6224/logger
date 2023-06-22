@@ -15,7 +15,7 @@ const sessionSchema = new Schema({
       requiered: false,
    },
    permissions: {
-      type: Array,
+      type: Object,
       requiered: false,
    },
    timestamp: {

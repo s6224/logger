@@ -50,6 +50,16 @@ export default function handler(req, res) {
             password: hashedPassword,
             authorized: false,
             log: false,
+            permissions: {
+               override: false,
+               proxy: true,
+               presets: true,
+               recorder: true,
+               sensor: true,
+               search: true,
+               hotkeys: true,
+               liveHistory: true,
+            },
          };
 
          const newUser = new User(data);
